@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, {useState} from "react";
+import { getUser, removeUser } from '../data/repository';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 // import components and fragments
@@ -11,6 +13,18 @@ import Signin from "./Signin";
 
 // Main application function
 function App() {
+
+  const [user, setUser] = useState(getUser());
+
+  const loginUser = (user) => {
+    setUser(user);
+  };
+
+  const logoutUser = () => {
+    removeUser();
+    setUser(null);
+  }
+
   return (
 
     // Top level container
@@ -35,7 +49,9 @@ function App() {
             <Route path="/register" component={ Register }/>
 
             {/* Route for signin page */}
-            <Route path="/signin" component={ Signin }/>
+            <Route path="/signin">
+              <Signin loginUser={loginUser} />
+            </Route>
           </Switch>
 
         </div>

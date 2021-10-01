@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { verifyUser } from '../data/repository';
 
 // This component returns and handles the
 // sign of already registered users
 
 const Signin = (props) => {
-    
+    const history = useHistory();
     // set useState for form fields
-    const [fields, setFields] = useState({email: "", password: ""});
+    const [fields, setFields] = useState({user_name: "", password: ""});
 
-    // set useState for error message
-    const [errorMessage, setErrorMessage] = useState(null);
 
     // Change handler
     const handleInputChange = (event) => {
@@ -18,31 +17,24 @@ const Signin = (props) => {
     };
 
     // Handle submit of the form
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         
         // Stop redirect on form submit
         event.preventDefault();
 
-        // Check user is valid
-        // const verified = validateUser(fields.email, fields.password);
+        const user = await verifyUser(fields.user_name,fields.password);
+        
+        if(user === null){
+            setFields({...fields, password: ""});
+            alert("Username and or password is incorrect, please try again.");
+            return;
+        }
 
-        // If valid login
-        // if(verified === true){
-            // props.loginUser(fields.email);
-            // alert("Welcome " + getName(fields.email));
-            // props.history.push("/home");
-            // return;
-        // }
+        props.loginUser(user);
 
-        // Reset fields
-        // const temp = {...fields};
-        // temp.password = "";
-        // setFields(temp);
-
-        // Set error message
-        // setErrorMessage("Invaild credentials, please try agian");
-
-    }
+        history.push("/");
+        
+    };
     
     return (
         <div class="container">
@@ -54,9 +46,9 @@ const Signin = (props) => {
                 <div className="col-6">
                     <form onSubmit={handleSubmit}>
                         <div class="form-group py-2">
-                            <label class="" htmlFor="email">Email address</label>
-                            <input  class="form-control" id="email" name="email" placeholder="Enter email"
-                                value={fields.email} onChange={handleInputChange}></input>
+                            <label class="" htmlFor="user_name">User_name</label>
+                            <input  class="form-control" id="user_name" name="user_name" placeholder="Enter user_name"
+                                value={fields.user_name} onChange={handleInputChange}></input>
                         </div>
                     
                         <div class="form-group py-2 border-bottom pb-3">
@@ -73,9 +65,6 @@ const Signin = (props) => {
                             <div class="form-group">
                                 <Link className="btn btn-dark w-100" to="/">Cancel</Link>
                             </div>
-                        </div>
-                        <div className="form-group">
-                            <span className="text-danger">{errorMessage}</span>
                         </div>
                     </form>
                 </div>

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useValidateForm } from '../hooks/useValidateForm';
-import { findUser, createUser } from "../data/repository";
+import { findUser, createUser, getUser } from "../data/repository";
 
 const Register = (props) => {
+
+    const user = getUser()
 
     // Configure fields for state tracking
     const [fields, setFields] = useState({user_name: "", first_name: "",last_name: "", email: "", password: "", confirmPassword: ""});
@@ -66,7 +68,7 @@ const Register = (props) => {
     return (
     <div class="container  ">
         <div className="row border-bottom">
-            <h2 className="text-center">Register</h2>
+            <h2 className="text-center">Profile</h2>
         </div>
         <div className="row">
             <div className="col"></div>
