@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import React, {useState} from "react";
-import { getUser, removeUser } from '../data/repository';
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import { getUser, removeUser } from "../data/repository";
+import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 // import components and fragments
 import Header from "../fragments/Header";
@@ -9,11 +9,11 @@ import Footer from "../fragments/Footer";
 import LandingPage from "./LandingPage";
 import Register from "./Register";
 import Signin from "./Signin";
-
+import Profile from "./Profile";
+import EditProfile from "./EditProfile";
 
 // Main application function
 function App() {
-
   const [user, setUser] = useState(getUser());
 
   const loginUser = (user) => {
@@ -23,42 +23,49 @@ function App() {
   const logoutUser = () => {
     removeUser();
     setUser(null);
-  }
+  };
 
   return (
-
     // Top level container
     <div className="d-flex flex-column min-vh-100">
-
       {/* Begin react router */}
       <Router>
-
         {/* Get header fragment */}
-        <Header />
+        <Header user={user} logoutUser={logoutUser} />
 
         {/* Main content container */}
         <div name="main container" className="container my-3">
-
           {/* Switch for react router */}
           <Switch>
-
             {/* Route for landing page */}
-            <Route exact path="/" component={ LandingPage }/>
+            <Route exact path="/">
+              <LandingPage user={ user } />
+            </Route>
 
             {/* Route for register page */}
-            <Route path="/register" component={ Register }/>
+            <Route path="/register">
+              <Register />
+            </Route>
 
             {/* Route for signin page */}
             <Route path="/signin">
               <Signin loginUser={loginUser} />
             </Route>
-          </Switch>
 
+            {/* Route for profile page */}
+            <Route path="/profile">
+              <Profile user={ user } loginUser={ loginUser} />
+            </Route>
+
+            {/* Route for edit profile page */}
+            <Route path="/edit-profile">
+              <EditProfile user={ user } />
+            </Route>
+          </Switch>
         </div>
 
         {/* Get footer fragment */}
         <Footer />
-
       </Router>
     </div>
   );

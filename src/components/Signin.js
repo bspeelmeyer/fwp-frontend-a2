@@ -35,7 +35,7 @@ const Signin = (props) => {
     props.loginUser(user);
 
     // Redirect to
-    history.push("/");
+    history.push("/profile");
   };
 
   return (

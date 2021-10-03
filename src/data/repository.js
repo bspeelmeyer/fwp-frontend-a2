@@ -48,6 +48,12 @@ async function createUser(user) {
   return response.data;
 }
 
+async function updateUser(user) {
+  const response = await axios.put(API_HOST + "/api/user/update", user);
+
+  return response.data;
+}
+
 /** Function takes user object as parameter,
  *  then creates JSON object and stores it in
  *  local storage under USER_KEY constant
@@ -72,4 +78,4 @@ const removeUser = () => {
   localStorage.removeItem(USER_KEY);
 };
 
-export { verifyUser, findUser, createUser, getUser, removeUser };
+export { verifyUser, findUser, createUser, getUser, removeUser, updateUser };
