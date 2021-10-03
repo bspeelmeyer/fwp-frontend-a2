@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useValidateForm } from "../hooks/useValidateForm";
-import { findUser, createUser } from "../data/repository";
+import { findUser, updateUser } from "../data/repository";
 
-const Register = (props) => {
+const EditProfile = (props) => {
   const history = useHistory();
+
+  useEffect(() => {
+    setFields({
+      user_name: props.user.user_name,
+      first_name: props.user.first_name,
+      last_name: props.user.last_name,
+      email: props.user.email,
+    });
+  }, [
+    props.user.user_name,
+    props.user.first_name,
+    props.user.last_name,
+    props.user.email,
+  ]);
 
   // Configure fields for state tracking
   const [fields, setFields] = useState({
@@ -61,19 +75,21 @@ const Register = (props) => {
       if ((await findUser(fields.user_name)) === null) {
         // Copy field values to user object
         const user = {
-          username: fields.user_name,
-          firstname: fields.first_name,
-          lastname: fields.last_name,
-          email: fields.email,
-          password: fields.password,
+            username: fields.user_name,
+            firstname: fields.first_name,
+            lastname: fields.last_name,
+            email: fields.email,
+            password: fields.password,
         };
 
         // Make API call to create
         // user in the database
-        await createUser(user);
+        await updateUser(user);
+
+        props.loginUser(user);
 
         // Redirect to signin page
-        history.push("/signin");
+        history.push("/profile");
       } else {
         alert("User name is already taken");
       }
@@ -87,7 +103,7 @@ const Register = (props) => {
   return (
     <div class="container  ">
       <div className="row border-bottom">
-        <h2 className="text-center">Register</h2>
+        <h2 className="text-center">Edit Profile</h2>
       </div>
       <div className="row">
         <div className="col"></div>
@@ -101,20 +117,14 @@ const Register = (props) => {
               </label>
               <input
                 class="form-control"
+                disabled
                 id="user_name"
                 name="user_name"
                 placeholder="Enter user name"
-                value={fields.name}
+                value={fields.user_name}
                 onChange={handleInputChange}
               ></input>
             </div>
-            {/* Message is show through useEffect hook
-            to alert user of invalid input */}
-            {hasName ? (
-              <p className="text-white my-auto">null</p>
-            ) : (
-              <p class="text-danger">Field must not be empty</p>
-            )}
             {/* First name input */}
             <div class="form-group py-2 ">
               <label class="" htmlFor="first_name">
@@ -125,7 +135,7 @@ const Register = (props) => {
                 id="first_name"
                 name="first_name"
                 placeholder="Enter first name"
-                value={fields.name}
+                value={fields.first_name}
                 onChange={handleInputChange}
               ></input>
             </div>
@@ -145,7 +155,7 @@ const Register = (props) => {
                 id="last_name"
                 name="last_name"
                 placeholder="Enter last name"
-                value={fields.name}
+                value={fields.last_name}
                 onChange={handleInputChange}
               ></input>
             </div>
@@ -279,13 +289,13 @@ const Register = (props) => {
             <div className="row py-2">
               <div class="form-group">
                 <button type="submit" class="btn btn-dark w-100">
-                  Submit
+                  Confirm
                 </button>
               </div>
             </div>
             <div className="row">
               <div class="form-group">
-                <Link className="btn btn-dark w-100" to="/">
+                <Link className="btn btn-dark w-100" to="/profile">
                   Cancel
                 </Link>
               </div>
@@ -299,4 +309,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default EditProfile;
