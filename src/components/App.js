@@ -16,6 +16,11 @@ import EditProfile from "./EditProfile";
 function App() {
   const [user, setUser] = useState(getUser());
 
+  const updateUser = (user) => {
+    removeUser();
+    setUser(user);
+  };
+
   const loginUser = (user) => {
     setUser(user);
   };
@@ -59,7 +64,7 @@ function App() {
 
             {/* Route for edit profile page */}
             <Route path="/edit-profile">
-              <EditProfile user={ user } />
+              <EditProfile user={ user } updateUser={ updateUser } />
             </Route>
           </Switch>
         </div>
