@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useValidateForm } from "../hooks/useValidateForm";
-import { findUser, updateUser } from "../data/repository";
+import { updateUser } from "../data/repository";
 
 const EditProfile = (props) => {
   const history = useHistory();
 
+  // Populate input fields
   useEffect(() => {
     setFields({
       user_name: props.user.user_name,
@@ -72,27 +73,26 @@ const EditProfile = (props) => {
       validEmail &&
       hasName
     ) {
-      if ((await findUser(fields.user_name)) === null) {
-        // Copy field values to user object
-        const user = {
-            username: fields.user_name,
-            firstname: fields.first_name,
-            lastname: fields.last_name,
-            email: fields.email,
-            password: fields.password,
-        };
+      // Copy field values to user object
+      const user = {
+        username: fields.user_name,
+        firstname: fields.first_name,
+        lastname: fields.last_name,
+        email: fields.email,
+        password: fields.password,
+      };
 
-        // Make API call to create
-        // user in the database
-        await updateUser(user);
+      // Make API to update user
+      // details in the database
+      // and store the response
+      const update = await updateUser(user);
 
-        props.loginUser(user);
+      // Update the user details
+      // in local storage
+      props.updateUser(update);
 
-        // Redirect to signin page
-        history.push("/profile");
-      } else {
-        alert("User name is already taken");
-      }
+      // Redirect to profile page
+      history.push("/profile");
     } else {
       // If validation returns at least
       // one false value alert user

@@ -21,7 +21,7 @@ async function verifyUser(username, password) {
   if (user !== null) setUser(user);
 
   return user;
-};
+}
 
 /** Function takes username as parameter, then performs get
  *  request from API. If username is found, function will return user
@@ -35,7 +35,7 @@ async function findUser(username) {
   const user = response.data;
 
   return user;
-};
+}
 
 /** Function takes user object as parameter, then
  *  preforms post to the API endpoint
@@ -47,9 +47,14 @@ async function createUser(user) {
 
   return response.data;
 }
-
+/** Function takes user object sends a request to
+ *  the API endpoint, the returns the response from
+ *  the server.
+ * @param  {Object} user
+ * @returns JSON user object
+ */
 async function updateUser(user) {
-  const response = await axios.put(API_HOST + "/api/user/update", user);
+  const response = await axios.put(API_HOST + "/api/users/update", user);
 
   return response.data;
 }
