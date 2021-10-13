@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import React, { useState } from "react";
 import { getUser, removeUser } from "../data/repository";
 import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 // import components and fragments
 import Header from "../fragments/Header";
@@ -11,6 +12,7 @@ import Register from "./Register";
 import Signin from "./Signin";
 import Profile from "./Profile";
 import EditProfile from "./EditProfile";
+import Forum from "./Posts";
 
 // Main application function
 function App() {
@@ -66,6 +68,13 @@ function App() {
             <Route path="/edit-profile">
               <EditProfile user={ user } updateUser={ updateUser } />
             </Route>
+
+            {/* Route for add forum */}
+            <Route path="/forum">
+              <Forum user={ user } />
+            </Route>
+
+
           </Switch>
         </div>
 

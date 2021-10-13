@@ -1,57 +1,50 @@
-import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
 
 const Register = (props) => {
+  const history = useHistory();
 
-    const history = useHistory();
+  if (props.user == null) {
+    history.push("/signin");
+    return null;
+  }
 
-    
-
-    if(props.user === null){
-        history.push("/signin");
-    };
-
-          
-
-    return (
+  return (
     <div class="container py-3">
-        <div className="row">
-            <div className="col">
-                <h2 className="text-end">Username:</h2>
-            </div>
-            <div className="col">
-                <h2 className="text-start">{props.user.user_name}</h2> 
-            </div>
+      <div className="card">
+        <h5 className="card-header bg-dark text-white">Profile</h5>
+        <div className="card-body">
+          <h5 className="card-title">{props.user.user_name}</h5>
         </div>
-        <div className="row">
-            <div className="col">
-                <h2 className="text-end">First name:</h2>
+        <ul className="list-group list-group-flush text-center">
+          <li className="list-group-item">
+            First name: {props.user.first_name}
+          </li>
+          <li className="list-group-item">Last name: {props.user.last_name}</li>
+          <li className="list-group-item">Email: {props.user.email}</li>
+        </ul>
+        <div className="card-footer bg-dark">
+          <div className="row">
+            <div className="col-10"></div>
+            <div className="col-1 text-end">
+              <Link to="/edit-profile">
+                <h3>
+                  <i className="bi bi-pencil-square text-white"></i>
+                </h3>
+              </Link>
             </div>
-            <div className="col">
-                <h2 className="text-start">{props.user.first_name}</h2> 
+            <div className="col-1 text-end">
+              <Link to="/">
+                <h3>
+                  <i className="bi bi-trash text-danger"></i>
+                </h3>
+              </Link>
             </div>
+          </div>
         </div>
-        <div className="row">
-            <div className="col">
-                <h2 className="text-end">Last name:</h2>
-            </div>
-            <div className="col">
-                <h2 className="text-start">{props.user.last_name}</h2> 
-            </div>
-        </div>
-        <div className="row">
-            <div className="col">
-                <h2 className="text-end">Email:</h2>
-            </div>
-            <div className="col">
-                <h2 className="text-start">{props.user.email}</h2> 
-            </div>
-        </div>
-        <div className="row">
-            <Link to="/edit-profile"><button type="button" className="btn btn-dark">Edit profile</button></Link>
-        </div>
+      </div>
     </div>
-    );
-}
+  );
+};
 
 export default Register;
