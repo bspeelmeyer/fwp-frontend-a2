@@ -13,6 +13,8 @@ import Signin from "./Signin";
 import Profile from "./Profile";
 import EditProfile from "./EditProfile";
 import Forum from "./Posts";
+import CreatePosts from "./CreatePost";
+import CreateReplyPost from "./CreateReplyPost";
 
 // Main application function
 function App() {
@@ -41,7 +43,7 @@ function App() {
         <Header user={user} logoutUser={logoutUser} />
 
         {/* Main content container */}
-        <div name="main container" className="container my-3">
+        <div name="main container" className="container">
           {/* Switch for react router */}
           <Switch>
             {/* Route for landing page */}
@@ -72,6 +74,16 @@ function App() {
             {/* Route for add forum */}
             <Route path="/forum">
               <Forum user={ user } />
+            </Route>
+
+            {/* Route for create post page */}
+            <Route path="/create-post">
+              <CreatePosts user={ user } />
+            </Route>
+
+            {/* Route for create reply post */}
+            <Route path="/create-reply">
+              <CreateReplyPost user={ user } />
             </Route>
 
 

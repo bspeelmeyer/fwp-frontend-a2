@@ -10,7 +10,7 @@ const Register = (props) => {
   }
 
   return (
-    <div class="container py-3">
+    <div class="container w-50 py-3">
       <div className="card">
         <h5 className="card-header bg-dark text-white">Profile</h5>
         <div className="card-body">
