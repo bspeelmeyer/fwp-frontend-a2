@@ -69,7 +69,7 @@ const CreatePosts = (props) => {
         <h5 className="card-header bg-dark text-white">Add post</h5>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
-            <div className="row px-3">
+            <div className="row px-2">
               <textarea
                 className="form-group px-1 w-100"
                 onChange={handleInputChange}

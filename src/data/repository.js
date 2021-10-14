@@ -75,7 +75,7 @@ async function uploadImage(image) {
   return response.data;
 }
 
-async function getAllPosts() {
+async function getAllPrimaryPosts() {
   const response = await axios.get(API_HOST + "/api/posts");
 
   return response.data;
@@ -115,6 +115,6 @@ export {
   removeUser,
   updateUser,
   createPost,
-  getAllPosts,
+  getAllPrimaryPosts,
   uploadImage
 };

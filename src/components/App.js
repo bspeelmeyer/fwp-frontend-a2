@@ -82,7 +82,7 @@ function App() {
             </Route>
 
             {/* Route for create reply post */}
-            <Route path="/create-reply">
+            <Route path="/create-reply/:id">
               <CreateReplyPost user={ user } />
             </Route>
 

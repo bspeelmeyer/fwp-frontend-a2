@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { getAllPosts } from "../data/repository";
+import { getAllPrimaryPosts } from "../data/repository";
 import CreatePosts from "./CreatePost";
 import { SpinningCircles } from "react-loading-icons";
 
@@ -13,7 +13,7 @@ const Posts = (props) => {
   // Method credit week 8 tutorial
   useEffect(() => {
     async function loadPosts() {
-      const currentPosts = await getAllPosts();
+      const currentPosts = await getAllPrimaryPosts();
 
       setPosts(currentPosts);
       setIsLoading(false);
@@ -54,11 +54,11 @@ const Posts = (props) => {
                     <div className="col-10"></div>
                     <div className="col-1 px-1">
                       {props.user.user_name === x.user_name ? (
-                        <Link to="/"><h3><i className="bi bi-pencil-square text-white"></i></h3></Link>
+                        <Link to="/create-reply"><h3><i className="bi bi-pencil-square text-white"></i></h3></Link>
                       ) : null}
                     </div>
                     <div className="col-1 px-1">
-                      <Link to="/"><h3><i className="bi bi-reply text-white"></i></h3></Link>
+                      <Link to={`/create-reply/${x.post_id}`}><h3><i className="bi bi-reply text-white"></i></h3></Link>
                     </div>
                   </div>
                 </div>
