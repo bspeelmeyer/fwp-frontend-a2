@@ -69,7 +69,7 @@ const Posts = (props) => {
                     <div className="col-10"></div>
                     <div className="col-1 px-1">
                       {props.user.user_name === x.user_name ? (
-                        <Link to="/create-reply">
+                        <Link to={`/edit-post/${x.post_id}`}>
                           <h3>
                             <i className="bi bi-pencil-square text-white"></i>
                           </h3>
@@ -86,8 +86,9 @@ const Posts = (props) => {
                   </div>
                   {replies.length !== 0
                     ? replies.map((y) => (
-                        <div className="row py-1">
+                       <div>
                           {x.post_id === y.parent_post_id ? (
+                            <div className="row py-1">
                             <div className="card bg-dark border-white">
                               <h6 className="card-header bg-dark border-bottom border-white text-white">
                                 {y.user_name}
@@ -97,13 +98,14 @@ const Posts = (props) => {
                               </div>
                               <div className="card-footer text-end bg-dark py-1">
                                 {props.user.user_name === y.user_name ? (
-                                  <Link to="/edit-post">
+                                  <Link to={`/edit-post/${y.post_id}`}>
                                     <h3>
                                       <i className="bi bi-pencil-square text-white"></i>
                                     </h3>
                                   </Link>
                                 ) : null}
                               </div>
+                            </div>
                             </div>
                           ) : null}
                         </div>

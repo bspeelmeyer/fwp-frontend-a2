@@ -15,6 +15,7 @@ import EditProfile from "./EditProfile";
 import Forum from "./Posts";
 import CreatePosts from "./CreatePost";
 import CreateReplyPost from "./CreateReplyPost";
+import EditPost from "./EditPost";
 
 // Main application function
 function App() {
@@ -84,6 +85,11 @@ function App() {
             {/* Route for create reply post */}
             <Route path="/create-reply/:id">
               <CreateReplyPost user={ user } />
+            </Route>
+
+            {/* Route for edit posts */}
+            <Route path="/edit-post/:id">
+              <EditPost user={ user } />
             </Route>
 
 
