@@ -16,6 +16,10 @@ const CreateReplyPost = (props) => {
     setPostLength(post.length);
   };
 
+  const handleClick = () => {
+    history.push("/forum");
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -53,9 +57,14 @@ const CreateReplyPost = (props) => {
               <p className="text-muted my-1 px-0">Max post length:{postLength}/600</p>
             </div>
             <div className="row">
-              <div className="col-2">
-                <button className="btn btn-dark" type="submit">
+              <div className="col">
+                <button className="btn btn-dark w-100" type="submit">
                   Post
+                </button>
+              </div>
+              <div className="col">
+                <button className="btn btn-dark w-100" onClick={ handleClick }>
+                  Cancel
                 </button>
               </div>
             </div>

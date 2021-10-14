@@ -81,6 +81,12 @@ async function getAllPrimaryPosts() {
   return response.data;
 }
 
+async function getAllReplies() {
+  const response = await axios.get(API_HOST + "/api/posts/replies");
+
+  return response.data;
+}
+
 // Helper functions for saving user in local storage
 
 /** Function takes user object as parameter,
@@ -116,5 +122,6 @@ export {
   updateUser,
   createPost,
   getAllPrimaryPosts,
-  uploadImage
+  uploadImage,
+  getAllReplies
 };
