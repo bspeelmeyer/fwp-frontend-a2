@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { getAllPrimaryPosts, getAllReplies } from "../data/repository";
-import CreatePosts from "./CreatePost";
+import { getAllPrimaryPosts, getAllReplies, deletePost } from "../data/repository";
 import { SpinningCircles } from "react-loading-icons";
+
+
 
 const Posts = (props) => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [replies, setReplies] = useState([]);
+  const [value, setValue] = useState(0);
+  const handleDelete = (post_id) => {
+    const post = {
+      post_id: post_id,
+    }
+    async function removePost() {
+      await deletePost(post);
+    }
+    removePost();
+    setValue(value + 1);
+  };
 
   // Method credit week 8 tutorial
   useEffect(() => {
@@ -26,7 +38,7 @@ const Posts = (props) => {
     }
     loadPosts();
     loadReplies();
-  }, []);
+  }, [value]);
 
   if (props.user == null) {
     history.push("/signin");
@@ -66,7 +78,7 @@ const Posts = (props) => {
                 )}
                 <div className="card-footer bg-dark">
                   <div className="row">
-                    <div className="col-10"></div>
+                    <div className="col-9"></div>
                     <div className="col-1 px-1">
                       {props.user.user_name === x.user_name ? (
                         <Link to={`/edit-post/${x.post_id}`}>
@@ -74,6 +86,15 @@ const Posts = (props) => {
                             <i className="bi bi-pencil-square text-white"></i>
                           </h3>
                         </Link>
+                      ) : null}
+                    </div>
+                    <div className="col-1 px-1">
+                      {props.user.user_name === x.user_name ? (
+                        <div onClick={() => handleDelete(x.post_id)}>
+                          <h3>
+                            <i className="bi bi-trash text-danger"></i>
+                          </h3>
+                        </div>
                       ) : null}
                     </div>
                     <div className="col-1 px-1">
@@ -86,26 +107,44 @@ const Posts = (props) => {
                   </div>
                   {replies.length !== 0
                     ? replies.map((y) => (
-                       <div>
+                        <div>
                           {x.post_id === y.parent_post_id ? (
                             <div className="row py-1">
-                            <div className="card bg-dark border-white">
-                              <h6 className="card-header bg-dark border-bottom border-white text-white">
-                                {y.user_name}
-                              </h6>
-                              <div className="card-body border-bottom border-white text-white py-1">
-                                <p>{y.post_content}</p>
+                              <div className="card bg-dark border-white">
+                                <h6 className="card-header bg-dark border-bottom border-white text-white">
+                                  {y.user_name}
+                                </h6>
+                                <div className="card-body border-bottom border-white text-white py-1">
+                                  <p>{y.post_content}</p>
+                                </div>
+                                <div className="card-footer text-end bg-dark py-1">
+                                  <div className="row">
+                                    <div className="col-10"></div>
+                                    <div className="col-1 px-1">
+                                      {props.user.user_name === y.user_name ? (
+                                        <Link to={`/edit-post/${y.post_id}`}>
+                                          <h4>
+                                            <i className="bi bi-pencil-square text-white"></i>
+                                          </h4>
+                                        </Link>
+                                      ) : null}
+                                    </div>
+                                    <div className="col-1 px-1">
+                                      {props.user.user_name === x.user_name ? (
+                                        <div
+                                          onClick={() =>
+                                            handleDelete(y.post_id)
+                                          }
+                                        >
+                                          <h4>
+                                            <i className="bi bi-trash text-danger"></i>
+                                          </h4>
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-                              <div className="card-footer text-end bg-dark py-1">
-                                {props.user.user_name === y.user_name ? (
-                                  <Link to={`/edit-post/${y.post_id}`}>
-                                    <h3>
-                                      <i className="bi bi-pencil-square text-white"></i>
-                                    </h3>
-                                  </Link>
-                                ) : null}
-                              </div>
-                            </div>
                             </div>
                           ) : null}
                         </div>
