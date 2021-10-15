@@ -4,6 +4,8 @@ import axios from "axios";
 const API_HOST = "http://localhost:4500";
 const USER_KEY = "user";
 
+// Functions for user CRUD
+
 /** Function takes username and password, then forms API call,
  *  If server returns user object, setUser is called, if null is returned
  *  by server, the function will return null.
@@ -59,6 +61,52 @@ async function updateUser(user) {
   return response.data;
 }
 
+async function deleteUser(user) {
+  const response = await axios.post(API_HOST + "/api/users/delete", user);
+
+  return response.data;
+}
+
+// Functions for post CRUD operations
+
+async function createPost(post) {
+  const response = await axios.post(API_HOST + "/api/posts", post);
+
+  return response.data;
+}
+
+async function uploadImage(image) {
+  const response = await axios.post(API_HOST + "/api/posts/upload-image", image);
+
+  return response.data;
+}
+
+async function getAllPrimaryPosts() {
+  const response = await axios.get(API_HOST + "/api/posts");
+
+  return response.data;
+}
+
+async function getAllReplies() {
+  const response = await axios.get(API_HOST + "/api/posts/replies");
+
+  return response.data;
+}
+
+async function getPostById(id){
+  const response = await axios.post(API_HOST + `/api/posts/getbyid/${id}`);
+
+  return response.data;
+}
+
+async function updatePost(updatePost){
+  const response = await axios.put(API_HOST + "/api/posts/update", updatePost);
+
+  return response.data;
+}
+
+// Helper functions for saving user in local storage
+
 /** Function takes user object as parameter,
  *  then creates JSON object and stores it in
  *  local storage under USER_KEY constant
@@ -83,4 +131,18 @@ const removeUser = () => {
   localStorage.removeItem(USER_KEY);
 };
 
-export { verifyUser, findUser, createUser, getUser, removeUser, updateUser };
+export {
+  verifyUser,
+  findUser,
+  createUser,
+  getUser,
+  removeUser,
+  updateUser,
+  createPost,
+  getAllPrimaryPosts,
+  uploadImage,
+  getAllReplies,
+  getPostById,
+  updatePost,
+  deleteUser,
+};
