@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
+import { deleteUser } from "../data/repository";
 
-const Register = (props) => {
+const Profile = (props) => {
   const history = useHistory();
 
   if (props.user == null) {
@@ -9,6 +10,17 @@ const Register = (props) => {
     return null;
   }
 
+  const handleClick = () => {
+    async function removeUser(){
+      const user = {
+        user_name: props.user.user_name,
+      }
+      await deleteUser(user);
+    }
+    removeUser();
+    props.logoutUser();
+    history.push("/") ;
+  }
   return (
     <div class="container w-50 py-3">
       <div className="card">
@@ -34,11 +46,11 @@ const Register = (props) => {
               </Link>
             </div>
             <div className="col-1 text-end">
-              <Link to="/">
+              <div onClick={ handleClick }>
                 <h3>
                   <i className="bi bi-trash text-danger"></i>
                 </h3>
-              </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -47,4 +59,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default Profile;

@@ -61,6 +61,12 @@ async function updateUser(user) {
   return response.data;
 }
 
+async function deleteUser(user) {
+  const response = await axios.post(API_HOST + "/api/users/delete", user);
+
+  return response.data;
+}
+
 // Functions for post CRUD operations
 
 async function createPost(post) {
@@ -138,4 +144,5 @@ export {
   getAllReplies,
   getPostById,
   updatePost,
+  deleteUser,
 };

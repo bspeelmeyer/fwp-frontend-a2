@@ -64,7 +64,7 @@ function App() {
 
             {/* Route for profile page */}
             <Route path="/profile">
-              <Profile user={ user } loginUser={ loginUser} />
+              <Profile user={ user } logoutUser={ logoutUser } loginUser={ loginUser} />
             </Route>
 
             {/* Route for edit profile page */}
