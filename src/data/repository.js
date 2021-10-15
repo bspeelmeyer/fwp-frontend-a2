@@ -105,6 +105,12 @@ async function updatePost(updatePost){
   return response.data;
 }
 
+async function deletePost(post) {
+  const response = await axios.post(API_HOST + "/api/posts/delete", post);
+
+  return response.data;
+}
+
 // Helper functions for saving user in local storage
 
 /** Function takes user object as parameter,
@@ -145,4 +151,5 @@ export {
   getPostById,
   updatePost,
   deleteUser,
+  deletePost,
 };
