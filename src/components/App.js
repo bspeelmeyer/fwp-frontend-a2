@@ -92,8 +92,7 @@ function App() {
               <EditPost user={ user } />
             </Route>
 
-
-          </Switch>
+         </Switch>
         </div>
 
         {/* Get footer fragment */}

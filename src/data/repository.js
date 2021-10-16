@@ -67,6 +67,38 @@ async function deleteUser(user) {
   return response.data;
 }
 
+async function getUsers(user) {
+  const response = await axios.post(API_HOST + "/api/users/allusers", user);
+
+  return response.data;
+}
+
+// Functions for follows CRUD operations
+
+async function getFollows(user) {
+  const response = await axios.post(API_HOST + "/api/follows/getfollow", user);
+
+  return response.data;
+}
+
+async function createFollow(follow) {
+  const response = await axios.post(API_HOST + "/api/follows", follow);
+
+  return response.date;
+}
+
+async function deleteFollow(follow) {
+  const response = await axios.post(API_HOST + "/api/follows/delete", follow);
+
+  return response.data;
+}
+
+async function onlyFollows(user){
+  const response = await axios.post(API_HOST + "/api/follows/onlyfollows", user);
+
+  return response.data;
+}
+
 // Functions for post CRUD operations
 
 async function createPost(post) {
@@ -81,8 +113,8 @@ async function uploadImage(image) {
   return response.data;
 }
 
-async function getAllPrimaryPosts() {
-  const response = await axios.get(API_HOST + "/api/posts");
+async function getAllPrimaryPosts(user) {
+  const response = await axios.post(API_HOST + "/api/posts/allposts", user);
 
   return response.data;
 }
@@ -152,4 +184,9 @@ export {
   updatePost,
   deleteUser,
   deletePost,
+  getUsers,
+  getFollows,
+  createFollow,
+  deleteFollow,
+  onlyFollows,
 };
