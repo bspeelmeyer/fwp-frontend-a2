@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// This component renders the header for the application
+// This component renders the header and navigation for the application
 const Header = (props) => {
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

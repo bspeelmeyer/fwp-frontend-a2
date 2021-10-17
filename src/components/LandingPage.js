@@ -8,9 +8,9 @@ const LandingPage = () => {
   return (
     <div class="container ">
       <div className="row">
-        <h1 class="text-center">Welcome to VibeCheck</h1>
+        <h1 class="text-center text-white">Welcome to VibeCheck</h1>
         <br />
-        <p class="text-center">
+        <p class="text-center text-white">
           VibeCheck is a place where you can chat <br />
           with fellow students about everything to <br /> do with your
           university and studies.

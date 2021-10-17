@@ -5,6 +5,8 @@ import { updateUser } from "../data/repository";
 
 const EditProfile = (props) => {
   const history = useHistory();
+  const [success, setSuccess] = useState(false);
+  const [fail, setFail] = useState(false);
 
   // Populate input fields
   useEffect(() => {
@@ -90,218 +92,169 @@ const EditProfile = (props) => {
       // Update the user details
       // in local storage
       props.updateUser(update);
+      setSuccess(true);
 
-      // Redirect to profile page
-      history.push("/profile");
+      // Delay redirect so user
+      // can see confirmation message
+      setTimeout(function () {
+        history.push("/forum");
+      }, 2000);
     } else {
       // If validation returns at least
       // one false value alert user
-      alert("please check form");
+      setFail(true);
     }
   };
 
   return (
     <div class="container  ">
-      <div className="row border-bottom">
-        <h2 className="text-center">Edit Profile</h2>
+      {/* Conditional rendering of alerts */}
+      <div className="row py-2">
+        {success ? (
+          <div className="alert alert-success shadow-lg" role="alert">
+            <p>Successfully updated profile.</p>
+          </div>
+        ) : fail ? (
+          <div className="alert alert-danger shadow-lg" role="alert">
+            <ul>
+              {!hasFirstName ? <li>Must enter first name</li> : null}
+              {!hasLastName ? <li>Must enter last name</li> : null}
+              {!validEmail ? <li>Must enter valid email</li> : null}
+            </ul>
+            <ul>
+              {!validLength ? (
+                <li>Password must be at least 8 characters</li>
+              ) : null}
+              {!upperCase ? (
+                <li>Password must contain at least one upper case character</li>
+              ) : null}
+              {!specialChar ? (
+                <li>Password must contain at least one special character</li>
+              ) : null}
+              {!hasNumber ? (
+                <li>Password must contain at least one number</li>
+              ) : null}
+              {!lowerCase ? (
+                <li>Password must contain at least one lower case character</li>
+              ) : null}
+              {!match ? <li>Passwords must match</li> : null}
+            </ul>
+          </div>
+        ) : null}
       </div>
-      <div className="row">
+      <div className="row py-0">
         <div className="col"></div>
         <div className="col-6">
-          {/* Form start */}
-          <form onSubmit={handleSubmit}>
-            <div class="form-group py-2 ">
-              {/* User name input */}
-              <label class="" htmlFor="user_name">
-                User Name
-              </label>
-              <input
-                class="form-control"
-                disabled
-                id="user_name"
-                name="user_name"
-                placeholder="Enter user name"
-                value={fields.user_name}
-                onChange={handleInputChange}
-              ></input>
+          <div className="card shadow-lg">
+            <h5 className="card-header bg-dark text-white">Edit profile</h5>
+            <div className="card-body">
+              {/* Form start */}
+              <form onSubmit={handleSubmit}>
+                <div class="form-group py-2 ">
+                  {/* User name input */}
+                  <label class="" htmlFor="user_name">
+                    User Name
+                  </label>
+                  <input
+                    class="form-control"
+                    disabled
+                    id="user_name"
+                    name="user_name"
+                    placeholder="Enter user name"
+                    value={fields.user_name}
+                    onChange={handleInputChange}
+                  ></input>
+                </div>
+                {/* First name input */}
+                <div class="form-group py-2 ">
+                  <label class="" htmlFor="first_name">
+                    First Name
+                  </label>
+                  <input
+                    class="form-control"
+                    id="first_name"
+                    name="first_name"
+                    placeholder="Enter first name"
+                    value={fields.first_name}
+                    onChange={handleInputChange}
+                  ></input>
+                </div>
+                {/* Last name input */}
+                <div class="form-group py-2 ">
+                  <label class="" htmlFor="last_name">
+                    Last Name
+                  </label>
+                  <input
+                    class="form-control"
+                    id="last_name"
+                    name="last_name"
+                    placeholder="Enter last name"
+                    value={fields.last_name}
+                    onChange={handleInputChange}
+                  ></input>
+                </div>
+                {/* Email input */}
+                <div class="form-group py-2">
+                  <label class="" htmlFor="email">
+                    Email address
+                  </label>
+                  <input
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Enter email"
+                    value={fields.email}
+                    onChange={handleInputChange}
+                  ></input>
+                </div>
+                {/* Password input */}
+                <div class="form-group py-2">
+                  <label class="" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    id="password"
+                    placeholder="Enter password"
+                    value={fields.password}
+                    onChange={handleInputChange}
+                  ></input>
+                </div>
+                {/* Confirm password input */}
+                <div class="form-group py-2">
+                  <label class="" htmlFor="confirmPassword">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    placeholder="Confirm password"
+                    value={fields.confirmPassword}
+                    onChange={handleInputChange}
+                  ></input>
+                </div>
+                <div className="row py-2">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-dark w-100">
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+                <div className="row">
+                  <div class="form-group">
+                    <Link className="btn btn-dark w-100" to="/profile">
+                      Cancel
+                    </Link>
+                  </div>
+                </div>
+              </form>
+              {/* End form */}
             </div>
-            {/* First name input */}
-            <div class="form-group py-2 ">
-              <label class="" htmlFor="first_name">
-                First Name
-              </label>
-              <input
-                class="form-control"
-                id="first_name"
-                name="first_name"
-                placeholder="Enter first name"
-                value={fields.first_name}
-                onChange={handleInputChange}
-              ></input>
-            </div>
-            {/* Error message for invalid input */}
-            {hasFirstName ? (
-              <p className="text-white my-auto">null</p>
-            ) : (
-              <p class="text-danger">Field must not be empty</p>
-            )}
-            {/* Last name input */}
-            <div class="form-group py-2 ">
-              <label class="" htmlFor="last_name">
-                Last Name
-              </label>
-              <input
-                class="form-control"
-                id="last_name"
-                name="last_name"
-                placeholder="Enter last name"
-                value={fields.last_name}
-                onChange={handleInputChange}
-              ></input>
-            </div>
-            {/* Error message for invalid input */}
-            {hasLastName ? (
-              <p className="text-white my-auto">null</p>
-            ) : (
-              <p class="text-danger">Field must not be empty</p>
-            )}
-            {/* Email input */}
-            <div class="form-group py-2">
-              <label class="" htmlFor="email">
-                Email address
-              </label>
-              <input
-                class="form-control"
-                id="email"
-                name="email"
-                placeholder="Enter email"
-                value={fields.email}
-                onChange={handleInputChange}
-              ></input>
-            </div>
-            {/* Error message for invalid input */}
-            {validEmail ? (
-              <p className="text-white my-auto">null</p>
-            ) : (
-              <p class="text-danger">Must be valid email address</p>
-            )}
-            {/* Password input */}
-            <div class="form-group py-2">
-              <label class="" htmlFor="password">
-                Password
-              </label>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                id="password"
-                placeholder="Enter password"
-                value={fields.password}
-                onChange={handleInputChange}
-              ></input>
-            </div>
-            {/* Confirm password input */}
-            <div class="form-group py-2">
-              <label class="" htmlFor="confirmPassword">
-                Password
-              </label>
-              <input
-                type="password"
-                class="form-control"
-                name="confirmPassword"
-                id="confirmPassword"
-                placeholder="Confirm password"
-                value={fields.confirmPassword}
-                onChange={handleInputChange}
-              ></input>
-            </div>
-            {/* Error messages for invalid password */}
-            <div class="form-group ">
-              <ul className="list-group py-2">
-                <li className="list-group-item">
-                  {validLength ? (
-                    <p class="text-center my-auto text-success">
-                      Password must be at least 8 characters{" "}
-                    </p>
-                  ) : (
-                    <p class="text-center my-auto text-danger">
-                      Password must be at least 8 characters
-                    </p>
-                  )}
-                </li>
-                <li className="list-group-item">
-                  {upperCase ? (
-                    <p class="text-center my-auto text-success">
-                      Password must contain at least one upper case character
-                    </p>
-                  ) : (
-                    <p class="text-center my-auto text-danger">
-                      Password must contain at least one upper case character
-                    </p>
-                  )}
-                </li>
-                <li className="list-group-item">
-                  {specialChar ? (
-                    <p class="text-center my-auto text-success">
-                      Password must contain at least one special character
-                    </p>
-                  ) : (
-                    <p class="text-center my-auto text-danger">
-                      Password must contain at least one special character
-                    </p>
-                  )}
-                </li>
-                <li className="list-group-item">
-                  {hasNumber ? (
-                    <p class="text-center my-auto text-success">
-                      Password must contain at least one number
-                    </p>
-                  ) : (
-                    <p class="text-center my-auto text-danger">
-                      Password must contain at least one number
-                    </p>
-                  )}
-                </li>
-                <li className="list-group-item">
-                  {lowerCase ? (
-                    <p class="text-center my-auto text-success">
-                      Password must contain at least one lower case character
-                    </p>
-                  ) : (
-                    <p class="text-center my-auto text-danger">
-                      Password must contain at least one lower case character
-                    </p>
-                  )}
-                </li>
-                <li className="list-group-item">
-                  {match ? (
-                    <p class="text-center my-auto text-success">
-                      Passwords must match
-                    </p>
-                  ) : (
-                    <p class="text-center my-auto text-danger">
-                      Passwords must match
-                    </p>
-                  )}
-                </li>
-              </ul>
-            </div>
-            <div className="row py-2">
-              <div class="form-group">
-                <button type="submit" class="btn btn-dark w-100">
-                  Confirm
-                </button>
-              </div>
-            </div>
-            <div className="row">
-              <div class="form-group">
-                <Link className="btn btn-dark w-100" to="/profile">
-                  Cancel
-                </Link>
-              </div>
-            </div>
-          </form>
-          {/* End form */}
+          </div>
         </div>
         <div className="col"></div>
       </div>
