@@ -15,25 +15,32 @@ import Follow from "./Follow";
 
 const Posts = (props) => {
   const history = useHistory();
+  // Is loading method from week 8 tutorial
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [replies, setReplies] = useState([]);
   const [dislikedPosts, setDislikedPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [value, setValue] = useState(0);
+  const [deleteAlert, setDeleteAlert] = useState(false);
 
   // Method credit week 8 tutorial
   useEffect(() => {
+    // Create object to be parsed to
+    // database
     const user = {
       user_name: props.user.user_name,
     };
 
+    // Function populates primary posts, reply
+    // posts, liked and disliked arrays
     async function loadPosts() {
       const currentPosts = await getAllPrimaryPosts(user);
       const currentReplies = await getAllReplies();
       const likedPosts = await getLikedPosts(user);
       const dislikedPosts = await getDislikedPosts(user);
 
+      // Set array states
       setPosts(currentPosts);
       setReplies(currentReplies);
       setLikedPosts(likedPosts);
@@ -45,36 +52,63 @@ const Posts = (props) => {
     loadPosts();
   }, [props.user.user_name, value]);
 
+  // Check user is logged in,
+  // if not redirect
   if (props.user == null) {
     history.push("/signin");
     return null;
   }
 
+  // Handle delete button click
   const handleDelete = (post_id) => {
+    // Create object to be parsed
+    // to the database
     const post = {
       post_id: post_id,
     };
+
+    // Function to make API call
+    // to delete post from database
     async function removePost() {
       await deletePost(post);
     }
     removePost();
+
+    // Show alert for 2 seconds
+    setDeleteAlert(true);
+    setTimeout(function () {
+      setDeleteAlert(false);
+    }, 2000);
+
+    // Force rerender of component
     setValue(value + 1);
   };
 
+  // Handle like button click
   const handleLike = (post_id) => {
+    // Create object to parse to
+    // database
     const post = {
       post_id: post_id,
       user_name: props.user.user_name,
     };
+
+    // Function to make API call
+    // to create like post relationship
+    // in the database
     async function like() {
       await likePost(post);
     }
     like();
+
+    // Time delay to allow database
+    // to update before rerender
     setTimeout(function () {
       setValue(value + 1);
     }, 500);
   };
 
+  // Inverse of handle like function
   const handleDislike = (post_id) => {
     const post = {
       post_id: post_id,
@@ -89,12 +123,16 @@ const Posts = (props) => {
     }, 500);
   };
 
+  // Function checks if user has
+  // disliked post
   const dislikeExists = (post_id) => {
     return dislikedPosts.some(function (ele) {
       return ele.post === post_id;
     });
   };
 
+  // Function check if user has liked
+  // post
   const likeExists = (post_id) => {
     return likedPosts.some(function (el) {
       return el.post === post_id;
@@ -102,14 +140,24 @@ const Posts = (props) => {
   };
 
   return (
-    <div className="container">
+    <div className="container py-1">
       <div className="row">
         <div className="col-3"></div>
         <div className="col-6">
+          <div className="row bg-dark text-white rounded-3">
+            <h2 className="text-center">Posts</h2>
+          </div>
           <div className="row py-1">
             <Link to="/create-post">
               <button className="btn btn-dark w-100">Create Post</button>
             </Link>
+          </div>
+          <div className="row">
+            {deleteAlert ? (
+              <div className="alert alert-success shadow-lg" role="alert">
+                <p>Successfully deleted post</p>
+              </div>
+            ) : null}
           </div>
           <div className="row">
             {isLoading ? (
@@ -121,7 +169,7 @@ const Posts = (props) => {
             ) : (
               posts.map((x) => (
                 <div className="container py-2">
-                  <div className="card">
+                  <div className="card shadow-lg">
                     <h5 className="card-header bg-dark text-white">
                       {x.user_name}
                     </h5>
@@ -136,7 +184,7 @@ const Posts = (props) => {
                       />
                     )}
                     <div className="card-footer bg-dark">
-                      <div className="row">
+                      <div className="row border-bottom border-white">
                         {likeExists(x.post_id) ? (
                           <div
                             onClick={() => handleLike(x.post_id)}
@@ -215,8 +263,8 @@ const Posts = (props) => {
                         ? replies.map((y) => (
                             <div>
                               {x.post_id === y.parent_post_id ? (
-                                <div className="row py-1">
-                                  <div className="card bg-dark border-white">
+                                <div className="row py-2 px-2">
+                                  <div className="card shadow bg-dark border-white">
                                     <h6 className="card-header bg-dark border-bottom border-white text-white">
                                       {y.user_name}
                                     </h6>

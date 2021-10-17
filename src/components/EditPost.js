@@ -6,49 +6,88 @@ const CreateReplyPost = (props) => {
   const history = useHistory();
   const [post, setPost] = useState("");
   const [postLength, setPostLength] = useState(null);
-  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [fail, setFail] = useState(false);
 
+  // Get id of post to be edited
+  // from the URL
   const { id } = useParams();
 
+  // When the page is loaded
+  // useEffect hook get the post
+  // details from the database
   useEffect(() => {
-    async function getPost(){
+    async function getPost() {
+      // Retrieve post details
       const Post = await getPostById(id);
+      // Set post state
       setPost(Post.post_content);
     }
     getPost();
-  },[id]);
+  }, [id]);
 
+  // Change handler, handles post length and content
   const handleInputChange = (event) => {
     setPost(event.target.value);
     setPostLength(post.length);
   };
 
+  // If cancel is clicked, page will render
+  // forum component
   const handleClick = () => {
     history.push("/forum");
-  }
+  };
 
+  // Handles the submission of the edit post
+  // form
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Trim post, method sourced from
+    // week 8 demo
     const trimmedPost = post.trim();
     if (trimmedPost === "") {
-      setError("Post can not be empty!!");
+      // Show bootstrap alert
+      setFail(true);
       return;
     }
-    
+
+    // Create updated post object to send to
+    // the database
     const updatedPost = {
       post_content: trimmedPost,
       post_id: id,
     };
 
-    // implement create post
+    // Make API call to send data
+    // to the database
     await updatePost(updatedPost);
-    history.push("/forum");
+
+    // Show bootstrap alert
+    setSuccess(true);
+
+    // Delay redirect so user
+    // can see confirmation message
+    setTimeout(function () {
+      history.push("/forum");
+    }, 2000);
   };
 
   return (
     <div className="container w-50 py-3">
-      <div className="card">
+      {/* Conditional rendering of alerts */}
+      <div className="row py-2">
+        {success ? (
+          <div className="alert alert-success shadow-lg" role="alert">
+            <p>Edited post successfully.</p>
+          </div>
+        ) : fail ? (
+          <div className="alert alert-danger shadow-lg" role="alert">
+            <p>Post cannot be empty.</p>
+          </div>
+        ) : null}
+      </div>
+      <div className="card shadow-lg">
         <h5 className="card-header bg-dark text-white">Edit post</h5>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
@@ -60,7 +99,9 @@ const CreateReplyPost = (props) => {
                 value={post}
                 placeholder="Whats on your mind?"
               ></textarea>
-              <p className="text-muted my-1 px-0">Max post length:{postLength}/600</p>
+              <p className="text-muted my-1 px-0">
+                Max post length:{postLength}/600
+              </p>
             </div>
             <div className="row">
               <div className="col">
@@ -69,7 +110,7 @@ const CreateReplyPost = (props) => {
                 </button>
               </div>
               <div className="col">
-                <button className="btn btn-dark w-100" onClick={ handleClick }>
+                <button className="btn btn-dark w-100" onClick={handleClick}>
                   Cancel
                 </button>
               </div>

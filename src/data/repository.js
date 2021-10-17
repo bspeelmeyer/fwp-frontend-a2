@@ -93,34 +93,40 @@ async function deleteFollow(follow) {
   return response.data;
 }
 
-async function onlyFollows(user){
-  const response = await axios.post(API_HOST + "/api/follows/onlyfollows", user);
+async function onlyFollows(user) {
+  const response = await axios.post(
+    API_HOST + "/api/follows/onlyfollows",
+    user
+  );
 
   return response.data;
 }
 
 // Functions for like and dislike post
 
-async function likePost(post){
+async function likePost(post) {
   const response = await axios.post(API_HOST + "/api/likes/liked", post);
 
   return response.data;
 }
 
-async function dislikePost(post){
+async function dislikePost(post) {
   const response = await axios.post(API_HOST + "/api/likes/dislike", post);
 
   return response.data;
 }
 
-async function getLikedPosts(user){
+async function getLikedPosts(user) {
   const response = await axios.post(API_HOST + "/api/likes/likedposts", user);
 
   return response.data;
 }
 
-async function getDislikedPosts(user){
-  const response = await axios.post(API_HOST + "/api/likes/dislikedposts", user);
+async function getDislikedPosts(user) {
+  const response = await axios.post(
+    API_HOST + "/api/likes/dislikedposts",
+    user
+  );
 
   return response.data;
 }
@@ -133,7 +139,10 @@ async function createPost(post) {
 }
 
 async function uploadImage(image) {
-  const response = await axios.post(API_HOST + "/api/posts/upload-image", image);
+  const response = await axios.post(
+    API_HOST + "/api/posts/upload-image",
+    image
+  );
 
   return response.data;
 }
@@ -150,13 +159,13 @@ async function getAllReplies() {
   return response.data;
 }
 
-async function getPostById(id){
+async function getPostById(id) {
   const response = await axios.post(API_HOST + `/api/posts/getbyid/${id}`);
 
   return response.data;
 }
 
-async function updatePost(updatePost){
+async function updatePost(updatePost) {
   const response = await axios.put(API_HOST + "/api/posts/update", updatePost);
 
   return response.data;
