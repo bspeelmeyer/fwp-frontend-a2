@@ -5,6 +5,10 @@ import {
   getAllPrimaryPosts,
   getAllReplies,
   deletePost,
+  likePost,
+  dislikePost,
+  getLikedPosts,
+  getDislikedPosts,
 } from "../data/repository";
 import { SpinningCircles } from "react-loading-icons";
 import Follow from "./Follow";
@@ -14,7 +18,37 @@ const Posts = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [replies, setReplies] = useState([]);
+  const [dislikedPosts, setDislikedPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
   const [value, setValue] = useState(0);
+
+  // Method credit week 8 tutorial
+  useEffect(() => {
+    const user = {
+      user_name: props.user.user_name,
+    };
+
+    async function loadPosts() {
+      const currentPosts = await getAllPrimaryPosts(user);
+      const currentReplies = await getAllReplies();
+      const likedPosts = await getLikedPosts(user);
+      const dislikedPosts = await getDislikedPosts(user);
+
+      setPosts(currentPosts);
+      setReplies(currentReplies);
+      setLikedPosts(likedPosts);
+      setDislikedPosts(dislikedPosts);
+
+      setIsLoading(false);
+    }
+
+    loadPosts();
+  }, [props.user.user_name, value]);
+
+  if (props.user == null) {
+    history.push("/signin");
+    return null;
+  }
 
   const handleDelete = (post_id) => {
     const post = {
@@ -27,30 +61,45 @@ const Posts = (props) => {
     setValue(value + 1);
   };
 
-  // Method credit week 8 tutorial
-  useEffect(() => {
-    const user = {
+  const handleLike = (post_id) => {
+    const post = {
+      post_id: post_id,
       user_name: props.user.user_name,
-      
+    };
+    async function like() {
+      await likePost(post);
     }
+    like();
+    setTimeout(function () {
+      setValue(value + 1);
+    }, 500);
+  };
 
-   
-    async function loadPosts() {
-      const currentPosts = await getAllPrimaryPosts(user);
-      const currentReplies = await getAllReplies();
-
-      setPosts(currentPosts);
-      setReplies(currentReplies);
-      setIsLoading(false);
+  const handleDislike = (post_id) => {
+    const post = {
+      post_id: post_id,
+      user_name: props.user.user_name,
+    };
+    async function dislike() {
+      await dislikePost(post);
     }
-    
-    loadPosts();
-  }, [ props.user.user_name, value]);
+    dislike();
+    setTimeout(function () {
+      setValue(value + 1);
+    }, 500);
+  };
 
-  if (props.user == null) {
-    history.push("/signin");
-    return null;
-  }
+  const dislikeExists = (post_id) => {
+    return dislikedPosts.some(function (ele) {
+      return ele.post === post_id;
+    });
+  };
+
+  const likeExists = (post_id) => {
+    return likedPosts.some(function (el) {
+      return el.post === post_id;
+    });
+  };
 
   return (
     <div className="container">
@@ -88,7 +137,54 @@ const Posts = (props) => {
                     )}
                     <div className="card-footer bg-dark">
                       <div className="row">
-                        <div className="col-9"></div>
+                        {likeExists(x.post_id) ? (
+                          <div
+                            onClick={() => handleLike(x.post_id)}
+                            className="col-1 px-1"
+                          >
+                            <h3>
+                              <i className="bi bi-hand-thumbs-up-fill text-white"></i>
+                            </h3>
+                          </div>
+                        ) : (
+                          <div
+                            onClick={() => handleLike(x.post_id)}
+                            className="col-1 px-1"
+                          >
+                            <h3>
+                              <i className="bi bi-hand-thumbs-up text-white"></i>
+                            </h3>
+                          </div>
+                        )}
+
+                        <div className="col-1 px-1">
+                          <h3 className="text-white">{x.likes}</h3>
+                        </div>
+
+                        {dislikeExists(x.post_id) ? (
+                          <div
+                            onClick={() => handleDislike(x.post_id)}
+                            className="col-1 px-1"
+                          >
+                            <h3>
+                              <i className="bi bi-hand-thumbs-down-fill text-white"></i>
+                            </h3>
+                          </div>
+                        ) : (
+                          <div
+                            onClick={() => handleDislike(x.post_id)}
+                            className="col-1 px-1"
+                          >
+                            <h3>
+                              <i className="bi bi-hand-thumbs-down text-white"></i>
+                            </h3>
+                          </div>
+                        )}
+
+                        <div className="col-1 px-1">
+                          <h3 className="text-white">{x.dislikes}</h3>
+                        </div>
+                        <div className="col-5"></div>
                         <div className="col-1 px-1">
                           {props.user.user_name === x.user_name ? (
                             <Link to={`/edit-post/${x.post_id}`}>
@@ -129,7 +225,66 @@ const Posts = (props) => {
                                     </div>
                                     <div className="card-footer text-end bg-dark py-1">
                                       <div className="row">
-                                        <div className="col-10"></div>
+                                        {likeExists(y.post_id) ? (
+                                          <div
+                                            onClick={() =>
+                                              handleLike(y.post_id)
+                                            }
+                                            className="col-1 px-1"
+                                          >
+                                            <h4>
+                                              <i className="bi bi-hand-thumbs-up-fill text-white"></i>
+                                            </h4>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            onClick={() =>
+                                              handleLike(y.post_id)
+                                            }
+                                            className="col-1 px-1"
+                                          >
+                                            <h4>
+                                              <i className="bi bi-hand-thumbs-up text-white"></i>
+                                            </h4>
+                                          </div>
+                                        )}
+
+                                        <div className="col-1 px-1">
+                                          <h4 className="text-white">
+                                            {y.likes}
+                                          </h4>
+                                        </div>
+
+                                        {dislikeExists(y.post_id) ? (
+                                          <div
+                                            onClick={() =>
+                                              handleDislike(y.post_id)
+                                            }
+                                            className="col-1 px-1"
+                                          >
+                                            <h4>
+                                              <i className="bi bi-hand-thumbs-down-fill text-white"></i>
+                                            </h4>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            onClick={() =>
+                                              handleDislike(y.post_id)
+                                            }
+                                            className="col-1 px-1"
+                                          >
+                                            <h4>
+                                              <i className="bi bi-hand-thumbs-down text-white"></i>
+                                            </h4>
+                                          </div>
+                                        )}
+
+                                        <div className="col-1 px-1">
+                                          <h4 className="text-white">
+                                            {y.dislikes}
+                                          </h4>
+                                        </div>
+                                        <div className="col-6"></div>
                                         <div className="col-1 px-1">
                                           {props.user.user_name ===
                                           y.user_name ? (
@@ -172,7 +327,7 @@ const Posts = (props) => {
           </div>
         </div>
         <div className="col-3">
-          <Follow user={ props.user } setValue={ setValue } value={ value } />
+          <Follow user={props.user} setValue={setValue} value={value} />
         </div>
       </div>
     </div>
