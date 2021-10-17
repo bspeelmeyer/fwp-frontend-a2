@@ -99,6 +99,31 @@ async function onlyFollows(user){
   return response.data;
 }
 
+// Functions for like and dislike post
+
+async function likePost(post){
+  const response = await axios.post(API_HOST + "/api/likes/liked", post);
+
+  return response.data;
+}
+
+async function dislikePost(post){
+  const response = await axios.post(API_HOST + "/api/likes/dislike", post);
+
+  return response.data;
+}
+
+async function getLikedPosts(user){
+  const response = await axios.post(API_HOST + "/api/likes/likedposts", user);
+
+  return response.data;
+}
+
+async function getDislikedPosts(user){
+  const response = await axios.post(API_HOST + "/api/likes/dislikedposts", user);
+
+  return response.data;
+}
 // Functions for post CRUD operations
 
 async function createPost(post) {
@@ -189,4 +214,8 @@ export {
   createFollow,
   deleteFollow,
   onlyFollows,
+  likePost,
+  getLikedPosts,
+  dislikePost,
+  getDislikedPosts,
 };
